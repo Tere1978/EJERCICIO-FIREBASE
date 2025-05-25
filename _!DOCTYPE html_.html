@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro de Capacitación - CECyT 1</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fbeff2;
+      color: #3e0d1a;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #800020;
+    }
+
+    form {
+      max-width: 600px;
+      margin: auto;
+      background-color: #fff0f5;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(128, 0, 32, 0.2);
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #800020;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #800020;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #a22d3f;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Registro de Capacitación - CECyT 1</h1>
+
+<form id="registroForm">
+  <label>Nombre del trabajador:</label>
+  <input type="text" id="nombre" required>
+
+  <label>Correo institucional:</label>
+  <input type="email" id="correo" required>
+
+  <label>Extensión telefónica:</label>
+  <input type="text" id="extension" required>
+
+  <label>Teléfono particular:</label>
+  <input type="tel" id="telefono" required>
+
+  <label>¿Por qué deseas capacitarte?</label>
+  <textarea id="motivo" rows="3" required></textarea>
+
+  <label>Área de interés:</label>
+  <select id="area" required>
+    <option value="">Selecciona una opción</option>
+    <option value="Docencia">Docencia</option>
+    <option value="Administración">Administración</option>
+    <option value="Tecnologías">Tecnologías</option>
+    <option value="Desarrollo personal">Desarrollo personal</option>
+  </select>
+
+  <button type="submit">Enviar registro</button>
+</form>
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBPZihXrewMVNUbX1ml0s9ODvEb0_IhrZE",
+    authDomain: "curso-cecyt-1.firebaseapp.com",
+    projectId: "curso-cecyt-1",
+    storageBucket: "curso-cecyt-1.firebasestorage.app",
+    messagingSenderId: "640843188819",
+    appId: "1:640843188819:web:4c3e6d9babaf0ff56d94a6",
+    measurementId: "G-L6LTWP1WCW"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const form = document.getElementById('registroForm');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const datos = {
+      nombre: document.getElementById('nombre').value,
+      correo: document.getElementById('correo').value,
+      extension: document.getElementById('extension').value,
+      telefono: document.getElementById('telefono').value,
+      motivo: document.getElementById('motivo').value,
+      area: document.getElementById('area').value,
+      fecha: new Date().toISOString()
+    };
+
+    try {
+      await addDoc(collection(db, "registros_cecyt1"), datos);
+      alert("¡Registro exitoso!");
+      form.reset();
+    } catch (error) {
+      console.error("Error al guardar en Firebase:", error);
+      alert("Hubo un error al enviar tu registro.");
+    }
+  });
+</script>
+
+</body>
+</html>
